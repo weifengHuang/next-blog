@@ -1,18 +1,39 @@
 import Link from 'next/link'
-
-const linkStyle = {
-  marginRight: 15
+import Router from 'next/router'
+// import header from '/styles/header.scss'
+export default class extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      date: new Date()
+    }
+  }
+  handleClick () {
+    Router.push('/about')
+    console.log('点击成功')
+  }
+  // static async getInitialProps({ req }) {
+  //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
+  //   return { userAgent }
+  // }
+  render() {
+    return (
+      <div id='header'>
+        <span>导航</span>
+        <span>文章</span>
+        <button onClick={e => this.handleClick(e)}>点击成功</button>
+        <style jsx>{
+        `
+        #header {
+          background-color: black;
+          span {
+            color: red;
+          }
+        }
+        `
+        }
+        </style>
+      </div>
+    )
+  }
 }
-
-const Header = () => (
-    <div>
-        <Link href="/">
-          <a style={linkStyle}>Home</a>
-        </Link>
-        <Link href="/about">
-          <a style={linkStyle}>About</a>
-        </Link>
-    </div>
-)
-
-export default Header
