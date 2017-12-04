@@ -21,13 +21,14 @@ export default class extends React.Component {
       <div id='header'>
         <span>导航</span>
         <span>文章</span>
-        <button onClick={e => this.handleClick(e)}>点击成功</button>
+        {
+          //<button onClick={e => this.handleClick(e)}>点击成功</button>
+        }
         <style jsx>{
         `
         #header {
-          background-color: black;
           span {
-            color: red;
+            margin: 10px;
           }
         }
         `

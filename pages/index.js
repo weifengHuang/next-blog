@@ -1,5 +1,6 @@
 import React from 'react'
 import Header from '../components/Header'
+import Layout from '../components/Layout'
 
 export default class extends React.Component {
   constructor(props) {
@@ -15,9 +16,7 @@ export default class extends React.Component {
   render() {
     return (
       <div>
-        <Header/>
-        <p>Hello World {this.state.date.toLocaleTimeString()}</p>
-        <input type='text'></input>
+        <Layout/>
       </div>
     )
   }
