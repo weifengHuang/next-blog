@@ -1,8 +1,7 @@
 import Link from 'next/link'
 import Router from 'next/router'
 const ReactMarkdown = require('react-markdown')
-const readmePath = require("../md/ci.md")
-const input = readmePath
+import input from '../md/ci.md'
 // import header from '/styles/header.scss'
 export default class extends React.Component {
   constructor(props) {
@@ -12,7 +11,6 @@ export default class extends React.Component {
     }
   }
   componentWillMount() {
-    const readmePath = require("../md/ci.md")
     // fetch(readmePath)
     //   .then(response => {
     //     return response.text()
