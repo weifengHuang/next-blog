@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import Router from 'next/router'
 const ReactMarkdown = require('react-markdown')
-import input from '../md/ci.md'
+import ioClient from 'socket.io-client'
+// import input from '../md/ci.md'
+// import 'github-markdown-css/github-markdown.css'
 // import header from '/styles/header.scss'
 export default class extends React.Component {
   constructor(props) {
@@ -11,15 +13,7 @@ export default class extends React.Component {
     }
   }
   componentWillMount() {
-    // fetch(readmePath)
-    //   .then(response => {
-    //     return response.text()
-    //   })
-    //   .then(text => {
-    //     this.setState({
-    //       markdown: text
-    //     })
-    //   })
+    var socket = ioClient('http://127.0.0.1'); // this happens after render
   }
   handleClick () {
   }
@@ -30,7 +24,6 @@ export default class extends React.Component {
   render() {
     return (
       <div id='content'>
-      <ReactMarkdown source={input} />,
        <div id="id">content</div>
         <style jsx>{`
           #content {

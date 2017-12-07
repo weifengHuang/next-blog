@@ -8,6 +8,8 @@ const handle = app.getRequestHandler()
 app.prepare()
 .then(() => {
   const server = express()
+  const http = require('http').Server(server)
+  const io = require('socket.io')(http)
   server.get('/p/:id', (req, res) => {
     const actualPage = '/post'
     const queryParams = { id: req.params.id }
@@ -16,7 +18,9 @@ app.prepare()
   server.get('*', (req, res) => {
     return handle(req, res)
   })
-
+  io.on('connection', (socket) => {
+    console.log('a user connected')
+  })
   server.listen(3000, (err) => {
     if (err) throw err
     console.log('> Ready on http://localhost:3000')
