@@ -9,13 +9,31 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      date: new Date()
+      date: new Date(),
+      socket: ioClient('http://127.0.0.1:3001')
     }
+    this.init()
+  }
+  init () {
+    this.state.socket.on('chat message', function(msg){
+      console.log('接受到服务器返回')
+    });
+    this.state.socket.on('hi', function(msg){
+      console.log('接受到服务器返回hi')
+    });
   }
   componentWillMount() {
-    var socket = ioClient('http://127.0.0.1'); // this happens after render
+    // this.setState({
+    //   socket: ioClient('http://127.0.0.1:3001')
+    // })
+    // this.state.socket.on('chat message', function(msg){
+    //   console.log('接受到服务器返回')
+    // });
   }
   handleClick () {
+    console.log('发送', this.state.socket)
+    this.state.socket.emit('chat message', '123');
+    // socket.emit
   }
   // static async getInitialProps({ req }) {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
@@ -25,6 +43,7 @@ export default class extends React.Component {
     return (
       <div id='content'>
        <div id="id">content</div>
+       <button onClick={e => this.handleClick(e)} >发送</button>
         <style jsx>{`
           #content {
             color: black;
