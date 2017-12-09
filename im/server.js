@@ -9,9 +9,9 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
-  socket.on('chat message', () => {
-    console.log('收到消息')
-    io.emit('chat message', '123')
+  socket.on('chat message', (data) => {
+    console.log('收到消息', data)
+    io.emit('chat message', data)
   })
 })
 
