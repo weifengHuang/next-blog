@@ -5,7 +5,7 @@ var io = require('socket.io')(http)
 
 io.on('connection', (socket) => {
   console.log('a user connected')
-  // socket.broadcast.emit('hi')
+  socket.broadcast.emit('broadcast')
   socket.on('disconnect', () => {
     console.log('user disconnected')
   })
