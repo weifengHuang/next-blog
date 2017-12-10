@@ -52,6 +52,9 @@ export default class extends React.Component {
   }
   handleClick () {
     this.pushToChatRecores(this.state.inputValue)
+    this.setState({
+      inputValue: ''
+    })
     this.state.socket.emit('chat message', this.state.inputValue)
   }
   inputOnchange (event) {
@@ -63,6 +66,11 @@ export default class extends React.Component {
     this.setState({
       chatUser: user
     })
+  }
+  handleKeyPress (e) {
+    if (e.key === 'Enter') {
+      this.handleClick()
+    }
   }
   // static async getInitialProps({ req }) {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
@@ -80,8 +88,8 @@ export default class extends React.Component {
             <ul>{this.state.chatRecords.map(e => <li key={Math.random().toString()}>{e}</li>)}</ul>
           </div>
           <div id="bottom">
-            <input type="text" value={this.state.value} onChange={e => this.inputOnchange(e)} />
-            <button onClick={e => this.handleClick(e)} >发送</button>
+            <input type="text" value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
+            <button className="send-button" onClick={e => this.handleClick(e)} >发送</button>
           </div>
         </div>
         <style jsx>{`
@@ -106,12 +114,29 @@ export default class extends React.Component {
               #chat-user {
                 display: flex;
                 justify-content: center;
-                margin-left: 5px;
                 border: 1px solid #eee;
               }
             }
             #bottom {
-              height: 25px;
+              // height: 25px;
+              display: flex;
+              align-items: center;
+              input {
+                flex: 1;
+                height: 25px;
+                // border-radius: 2px;
+                border: 1px solid #c5c0c0;
+                &:focus{
+                  outline: none;
+                }
+              }
+              .send-button {
+                background-color: #fff;
+                border: 1px solid rgb(156, 205, 245);
+                padding: 5px 20px;
+                // border-radius: 6px;
+                color: #2196F3;
+              }
             }
           }
         }

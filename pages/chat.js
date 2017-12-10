@@ -10,8 +10,18 @@ export default class extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div id='chat'>
+        <h1>群聊室</h1>
         <DialogLayout/>
+        <style jsx>{`
+          #chat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+          }
+          `}</style>
       </div>
     )
   }

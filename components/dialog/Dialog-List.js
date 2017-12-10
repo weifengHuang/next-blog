@@ -16,6 +16,8 @@ export default class extends React.Component {
         {this.props.userList.map(user => <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}</div>)}
         <style jsx> {`
           #dialogList {
+            overflow: auto;
+            height: 100%;
             .user {
               cursor: pointer;
               margin: 5px;
