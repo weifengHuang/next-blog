@@ -6,10 +6,27 @@ export default class extends React.Component {
     this.state = {
     }
   }
+  clickUser (e, user) {
+    console.log('user', user)
+    this.props.selectUserChat(user)
+  }
   render () {
     return (
       <div id="dialogList">
-        {this.props.userList.map(user => <div>{user.name}</div>)}
+        {this.props.userList.map(user => <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}</div>)}
+        <style jsx> {`
+          #dialogList {
+            .user {
+              cursor: pointer;
+              margin: 5px;
+              &:hover {
+                background-color: #eee;
+              }
+            }
+          }
+          `
+        }
+        </style>
       </div>
     )
   }

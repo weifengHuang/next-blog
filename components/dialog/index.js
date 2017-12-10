@@ -7,20 +7,12 @@ export default class extends React.Component {
     super(props)
     this.state = {
       inputValue: '',
+      user: '',
       socket: ioClient('http://127.0.0.1:3001'),
       chatRecords: [],
-      userList: [
-        {
-          name: 'hwf',
-          id: 1
-        },
-        {
-          name: 'hwf1',
-          id: 2
-        }
-      ]
+      userList: [],
+      chatUser: {}
     }
-    this.init()
   }
   init () {
     this.state.socket.on('chat message', (msg) => {
@@ -33,12 +25,29 @@ export default class extends React.Component {
       console.log(`广播发出的消息${msg}`)
       this.pushToChatRecores(msg)
     })
+    this.state.socket.emit('login', '', (user) => {
+      console.log('login 服务器返回user', user)
+      this.setState({
+        user: user
+      })
+    })
+    this.state.socket.on('getLoginList', (loginUserList) => {
+      this.setState({
+        userList: loginUserList
+      })
+    })
   }
   componentWillMount() {
+    this.init()
   }
   pushToChatRecores (input) {
     this.setState({
       chatRecords: [...this.state.chatRecords, input]
+    })
+  }
+  pushToUserList (userList) {
+    this.setState({
+      userList: [...this.state.userList, userList]
     })
   }
   handleClick () {
@@ -50,6 +59,11 @@ export default class extends React.Component {
       inputValue: event.target.value
     })
   }
+  selectUserChat (user) {
+    this.setState({
+      chatUser: user
+    })
+  }
   // static async getInitialProps({ req }) {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
   //   return { userAgent }
@@ -58,10 +72,11 @@ export default class extends React.Component {
     return (
       <div id='dialog'>
         <div id="dialog-list">
-        <DialogList userList={this.state.userList}/>
+        <DialogList userList={this.state.userList} selectUserChat = {user => this.selectUserChat(user)}/>
         </div>
         <div id="dialog-content">
           <div id="top">
+            <div id="chat-user">{this.state.chatUser.name || '无对话人'}</div>
             <ul>{this.state.chatRecords.map(e => <li key={Math.random().toString()}>{e}</li>)}</ul>
           </div>
           <div id="bottom">
@@ -79,18 +94,24 @@ export default class extends React.Component {
           flex-wrap: wrap;
           #dialog-list {
             width: 200px;
+            border: 1px solid gray;
           }
           #dialog-content {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
+            flex-direction: column;
             #top {
-              width: 100%;
               flex-grow: 1;
+              #chat-user {
+                display: flex;
+                justify-content: center;
+                margin-left: 5px;
+                border: 1px solid #eee;
+              }
             }
             #bottom {
-              width: 100%;
-              height: 120px;
+              height: 25px;
             }
           }
         }
