@@ -9,10 +9,9 @@ export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      date: new Date(),
-      socket: ioClient('http://127.0.0.1:3001')
+      date: new Date()
     }
-    this.init()
+    // this.init()
   }
   init () {
     this.state.socket.on('chat message', function(msg){
@@ -32,7 +31,6 @@ export default class extends React.Component {
   }
   handleClick () {
     console.log('发送', this.state.socket)
-    this.state.socket.emit('chat message', '123');
     // socket.emit
   }
   // static async getInitialProps({ req }) {

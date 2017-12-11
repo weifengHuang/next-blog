@@ -1,45 +1,63 @@
 import Link from 'next/link'
 import Router from 'next/router'
-import ioClient from 'socket.io-client'
+import io from 'socket.io-client'
 import DialogList from './Dialog-List'
+// const socket = ioClient('http://127.0.0.1:3001')
+
 export default class extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       inputValue: '',
       user: '',
-      socket: ioClient('http://127.0.0.1:3001'),
       chatRecords: [],
       userList: [],
       chatUser: {}
+      // socket: io('http://127.0.0.1:3001')
     }
+    // this.init() 错误示范！！！
   }
   init () {
-    this.state.socket.on('chat message', (msg) => {
-      setTimeout(() => {
-        this.pushToChatRecores(msg)
-      }, 1000)
-      console.log('接受到服务器返回')
-    })
-    this.state.socket.on('broadcast', (msg) => {
-      console.log(`广播发出的消息${msg}`)
-      this.pushToChatRecores(msg)
-    })
-    this.state.socket.emit('login', '', (user) => {
+    // this.socket = io('http://127.0.0.1:3001')
+    // this.socket.emit('login', '', (user) => {
+    //   console.log('login 服务器返回user', user)
+    //   this.setState({
+    //     user: user
+    //   })
+    // })
+  }
+  componentDidMount() {
+    this.socket = io('http://127.0.0.1:3001')
+    this.socket.emit('login', '', (user) => {
       console.log('login 服务器返回user', user)
       this.setState({
         user: user
       })
     })
-    this.state.socket.on('getLoginList', (loginUserList) => {
+    this.socket.on('chat message', (msg) => {
+      setTimeout(() => {
+        this.pushToChatRecores(msg)
+      }, 1000)
+      console.log('接受到服务器返回')
+    })
+    this.socket.on('broadcast', (msg) => {
+      console.log(`广播发出的消息${msg}`)
+      this.pushToChatRecores(msg)
+    })
+
+    this.socket.on('getLoginList', (loginUserList) => {
       this.setState({
         userList: loginUserList
       })
     })
+    // this.socket.on('message', this.handleMessage)
   }
-  componentWillMount() {
-    this.init()
+  // close socket connection
+  componentWillUnmount() {
+    this.socket.close()
   }
+  // componentWillMount() {
+  // }
   pushToChatRecores (input) {
     this.setState({
       chatRecords: [...this.state.chatRecords, input]
@@ -55,7 +73,10 @@ export default class extends React.Component {
     this.setState({
       inputValue: ''
     })
-    this.state.socket.emit('chat message', this.state.inputValue)
+    this.socket.emit('chat message', {
+      to: this.state.user.socketId,
+      msg: this.state.inputValue
+    })
   }
   inputOnchange (event) {
     this.setState({
@@ -84,7 +105,10 @@ export default class extends React.Component {
         </div>
         <div id="dialog-content">
           <div id="top">
-            <div id="chat-user">{this.state.chatUser.name || '无对话人'}</div>
+            <div id="chat-user">
+              {this.state.chatUser.name || '无对话人'}
+              <span style={{'margin-left': '20px'}}>当前昵称：{this.state.user.name}</span>
+            </div>
             <ul>{this.state.chatRecords.map(e => <li key={Math.random().toString()}>{e}</li>)}</ul>
           </div>
           <div id="bottom">

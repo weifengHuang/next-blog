@@ -11,7 +11,7 @@ io.on('connection', (socket) => {
   // })
   socket.on('chat message', (data) => {
     console.log('收到消息', data)
-    io.emit('chat message', data)
+    io.to(data.to).emit('chat message', data.msg)
   })
   socket.on('login', (data, fn) => {
     console.log('触发login事件', count, socket.id)
@@ -26,10 +26,11 @@ io.on('connection', (socket) => {
     io.emit('getLoginList', loginUserList)
   })
   socket.on('disconnect', (user) => {
+    console.log('用户下线了')
     loginUserList = loginUserList.filter(e => {
       return e.socketId !== socket.id
     })
-    io.emit('disconnect', loginUserList)
+    // io.emit('disconnect', loginUserList)
   })
 })
 
