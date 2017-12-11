@@ -14,12 +14,6 @@ export default class extends React.Component {
     // this.init()
   }
   init () {
-    this.state.socket.on('chat message', function(msg){
-      console.log('接受到服务器返回')
-    });
-    this.state.socket.on('hi', function(msg){
-      console.log('接受到服务器返回hi')
-    });
   }
   componentWillMount() {
     // this.setState({

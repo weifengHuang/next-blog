@@ -74,7 +74,7 @@ export default class extends React.Component {
       inputValue: ''
     })
     this.socket.emit('chat message', {
-      to: this.state.user.socketId,
+      to: this.state.chatUser.socketId,
       msg: this.state.inputValue
     })
   }

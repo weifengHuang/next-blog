@@ -9,8 +9,12 @@ io.on('connection', (socket) => {
   // socket.on('disconnect', () => {
   //   console.log('user disconnected')
   // })
+  // socket.join(socket.id)
+  // socket.on('join', function (user) {
+  //   socket.join(socket.id); // We are using room of socket io
+  // });
   socket.on('chat message', (data) => {
-    console.log('收到消息', data)
+    console.log('收到消息', data.to)
     io.to(data.to).emit('chat message', data.msg)
   })
   socket.on('login', (data, fn) => {
