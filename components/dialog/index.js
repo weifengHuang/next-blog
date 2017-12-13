@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 import io from 'socket.io-client'
 import DialogList from './Dialog-List'
+import DialogContent from './Dialog-Content'
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class extends React.Component {
@@ -10,21 +11,23 @@ export default class extends React.Component {
     this.state = {
       inputValue: '',
       user: '',
-      chatRecords: [],
+      chatRecords: [
+        {
+          type: 'input',
+          owner: 'mine',
+          content: '131231231'
+        },
+        {
+          type: 'input',
+          owner: 'other',
+          content: '别人的'
+        }
+      ],
       userList: [],
       chatUser: {}
       // socket: io('http://127.0.0.1:3001')
     }
     // this.init() 错误示范！！！
-  }
-  init () {
-    // this.socket = io('http://127.0.0.1:3001')
-    // this.socket.emit('login', '', (user) => {
-    //   console.log('login 服务器返回user', user)
-    //   this.setState({
-    //     user: user
-    //   })
-    // })
   }
   componentDidMount() {
     this.socket = io('http://127.0.0.1:3001')
@@ -36,7 +39,12 @@ export default class extends React.Component {
     })
     this.socket.on('chat message', (msg) => {
       setTimeout(() => {
-        this.pushToChatRecores(msg)
+        let message = {
+          type: 'text',
+          owner: 'other',
+          content: msg
+        }
+        this.pushToChatRecores(message)
       }, 1000)
       console.log('接受到服务器返回')
     })
@@ -69,7 +77,12 @@ export default class extends React.Component {
     })
   }
   handleClick () {
-    this.pushToChatRecores(this.state.inputValue)
+    let message = {
+      type: 'input',
+      owner: 'mine',
+      content: this.state.inputValue
+    }
+    this.pushToChatRecores(message)
     this.setState({
       inputValue: ''
     })
@@ -109,7 +122,7 @@ export default class extends React.Component {
               {this.state.chatUser.name || '无对话人'}
               <span style={{'margin-left': '20px'}}>当前昵称：{this.state.user.name}</span>
             </div>
-            <ul>{this.state.chatRecords.map(e => <li key={Math.random().toString()}>{e}</li>)}</ul>
+            <DialogContent chatRecords={this.state.chatRecords}/>
           </div>
           <div id="bottom">
             <input type="text" value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />

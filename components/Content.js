@@ -34,8 +34,6 @@ export default class extends React.Component {
   render() {
     return (
       <div id='content'>
-       <div id="id">content</div>
-       <button onClick={e => this.handleClick(e)} >发送</button>
         <style jsx>{`
           #content {
             color: black;

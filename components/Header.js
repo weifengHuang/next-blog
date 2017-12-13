@@ -8,8 +8,8 @@ export default class extends React.Component {
       date: new Date()
     }
   }
-  handleClick () {
-    Router.push('/about')
+  handleClick (router) {
+    Router.push(`/${router}`)
     console.log('点击成功')
   }
   // static async getInitialProps({ req }) {
@@ -21,6 +21,7 @@ export default class extends React.Component {
       <div id='header'>
         <span>导航</span>
         <span>文章</span>
+        <span onClick={e => this.handleClick('chat', e)}>聊天室</span>
         {
           //<button onClick={e => this.handleClick(e)}>点击成功</button>
         }
@@ -29,6 +30,7 @@ export default class extends React.Component {
         #header {
           span {
             margin: 10px;
+            cursor: pointer
           }
         }
         `

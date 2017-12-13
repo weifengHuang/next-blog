@@ -13,7 +13,11 @@ export default class extends React.Component {
   render () {
     return (
       <div id="dialogList">
-        {this.props.userList.map(user => <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}</div>)}
+        {this.props.userList.map(user => {
+          return <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}
+
+          </div>})
+        }
         <style jsx> {`
           #dialogList {
             overflow: auto;
