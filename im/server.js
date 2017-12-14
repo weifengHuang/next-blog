@@ -19,15 +19,16 @@ io.on('connection', (socket) => {
   })
   socket.on('login', (data, fn) => {
     console.log('触发login事件', count, socket.id)
+    let name = `user${count}`
     let user = {
       id: count++,
-      name: `user${count}`,
+      name: name,
       socketId: socket.id
     }
     loginUserList.push(user)
     fn(user)
     socket.broadcast.emit('broadcast', `广播消息${user.name}上线了`)
-    io.emit('getLoginList', loginUserList)
+    io.emit('getLoginList', loginUserList.filter(e => e.name !== name))
   })
   socket.on('disconnect', (user) => {
     console.log('用户下线了')
