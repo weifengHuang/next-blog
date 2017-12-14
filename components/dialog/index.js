@@ -3,6 +3,7 @@ import Router from 'next/router'
 import io from 'socket.io-client'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
+import DialogMenu from './Dialog-Menu'
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class extends React.Component {
@@ -10,24 +11,24 @@ export default class extends React.Component {
     super(props)
     this.state = {
       inputValue: '',
-      user: '',
+      user: {},
       chatRecords: [
         {
           type: 'input',
           owner: 'mine',
-          content: '131231231'
+          content: '131231231',
+          time: new Date()
         },
         {
           type: 'input',
           owner: 'other',
-          content: '别人的'
+          content: '别人的',
+          time: new Date()
         }
       ],
       userList: [],
       chatUser: {}
-      // socket: io('http://127.0.0.1:3001')
     }
-    // this.init() 错误示范！！！
   }
   componentDidMount() {
     this.socket = io('http://127.0.0.1:3001')
@@ -42,7 +43,8 @@ export default class extends React.Component {
         let message = {
           type: 'text',
           owner: 'other',
-          content: msg
+          content: msg,
+          time: new Date()
         }
         this.pushToChatRecores(message)
       }, 1000)
@@ -50,7 +52,7 @@ export default class extends React.Component {
     })
     this.socket.on('broadcast', (msg) => {
       console.log(`广播发出的消息${msg}`)
-      this.pushToChatRecores(msg)
+      // this.pushToChatRecores(msg)
     })
 
     this.socket.on('getLoginList', (loginUserList) => {
@@ -80,7 +82,8 @@ export default class extends React.Component {
     let message = {
       type: 'input',
       owner: 'mine',
-      content: this.state.inputValue
+      content: this.state.inputValue,
+      time: new Date()
     }
     this.pushToChatRecores(message)
     this.setState({
@@ -113,14 +116,14 @@ export default class extends React.Component {
   render() {
     return (
       <div id='dialog'>
-        <div id="dialog-list">
-        <DialogList userList={this.state.userList} selectUserChat = {user => this.selectUserChat(user)}/>
+        <div id="dialog-left">
+          <DialogMenu id="dialog-menu" {...this.state.user}/>
+          <DialogList id="dialog-list" userList={this.state.userList} selectUserChat = {user => this.selectUserChat(user)}/>
         </div>
         <div id="dialog-content">
           <div id="top">
             <div id="chat-user">
               {this.state.chatUser.name || '无对话人'}
-              <span style={{'margin-left': '20px'}}>当前昵称：{this.state.user.name}</span>
             </div>
             <DialogContent chatRecords={this.state.chatRecords}/>
           </div>
@@ -134,12 +137,13 @@ export default class extends React.Component {
           border: 1px solid #cebdbd;
           margin: 15px;
           height: 500px;
-          width: 800px;
+          width: 900px;
           display: flex;
           flex-wrap: wrap;
-          #dialog-list {
-            width: 200px;
+          #dialog-left {
+            width: 250px;
             border: 1px solid gray;
+            display: flex;
           }
           #dialog-content {
             flex: 1;

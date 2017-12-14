@@ -14,9 +14,17 @@ export default class extends React.Component {
           this.props.chatRecords.map((record, index) => {
             let msg
             if (record.owner === 'mine') {
-               msg = <div className='mine'>{record.content}</div>
+               msg =
+               <div className='mine'>
+                <div>{record.time.toLocaleTimeString()}</div>
+                <div className='content'>{record.content}</div>
+               </div>
             } else {
-               msg = <div className='other'>{record.content}</div>
+               msg =
+               <div className='other'>
+                <div>{record.time.toLocaleTimeString()}</div>
+                <div className='content'>{record.content}</div>
+               </div>
             }
             return <div key={index}>{msg}</div>
           })
@@ -27,13 +35,22 @@ export default class extends React.Component {
             height: 100%;
             .mine {
               display: flex;
-              justify-content: flex-end;
+              // justify-content: flex-end;
               margin-right: 10px;
+              flex-direction: column;
+              align-items: flex-end;
+              flex-wrap: wrap;
             }
             .other {
               display: flex;
-              justify-content: flex-start;
               margin-left: 10px;
+              flex-direction: column;
+              align-items: flex-start;
+            }
+            .content {
+              margin: 10px;
+              // width: 100%;
+              // display: block;
             }
           }
           `

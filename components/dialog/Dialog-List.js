@@ -15,13 +15,13 @@ export default class extends React.Component {
       <div id="dialogList">
         {this.props.userList.map(user => {
           return <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}
-
           </div>})
         }
         <style jsx> {`
           #dialogList {
             overflow: auto;
             height: 100%;
+            flex: 1;
             .user {
               cursor: pointer;
               margin: 5px;
