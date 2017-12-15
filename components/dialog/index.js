@@ -4,10 +4,12 @@ import io from 'socket.io-client'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
+import { imUrL } from 'config/index.js'
+console.log('index imurl', imUrL)
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       inputValue: '',
@@ -30,8 +32,8 @@ export default class extends React.Component {
       chatUser: {}
     }
   }
-  componentDidMount() {
-    this.socket = io('http://127.0.0.1:3001')
+  componentDidMount () {
+    this.socket = io(imUrL)
     this.socket.emit('login', '', (user) => {
       console.log('login 服务器返回user', user)
       this.setState({
@@ -63,7 +65,7 @@ export default class extends React.Component {
     // this.socket.on('message', this.handleMessage)
   }
   // close socket connection
-  componentWillUnmount() {
+  componentWillUnmount () {
     this.socket.close()
   }
   // componentWillMount() {
@@ -113,23 +115,23 @@ export default class extends React.Component {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
   //   return { userAgent }
   // }
-  render() {
+  render () {
     return (
       <div id='dialog'>
-        <div id="dialog-left">
-          <DialogMenu id="dialog-menu" {...this.state.user}/>
-          <DialogList id="dialog-list" userList={this.state.userList} selectUserChat = {user => this.selectUserChat(user)}/>
+        <div id='dialog-left'>
+          <DialogMenu id='dialog-menu' {...this.state.user} />
+          <DialogList id='dialog-list' userList={this.state.userList} selectUserChat={user => this.selectUserChat(user)} />
         </div>
-        <div id="dialog-content">
-          <div id="top">
-            <div id="chat-user">
+        <div id='dialog-content'>
+          <div id='top'>
+            <div id='chat-user'>
               {this.state.chatUser.name || '无对话人'}
             </div>
-            <DialogContent chatRecords={this.state.chatRecords}/>
+            <DialogContent chatRecords={this.state.chatRecords} />
           </div>
-          <div id="bottom">
-            <input type="text" value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
-            <button className="send-button" onClick={e => this.handleClick(e)} >发送</button>
+          <div id='bottom'>
+            <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
+            <button className='send-button' onClick={e => this.handleClick(e)} >发送</button>
           </div>
         </div>
         <style jsx>{`

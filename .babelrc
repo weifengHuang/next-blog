@@ -10,5 +10,17 @@
         }
       }
     ]
+  ],
+  "plugins": [
+  [
+    "module-resolver",
+    {
+      "root": ["./"],
+      "alias": {
+        "components": "./components",
+        "config": "./config"
+      }
+    }
   ]
+]
 }
