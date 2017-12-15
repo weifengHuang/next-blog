@@ -1,5 +1,5 @@
 export default class extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
     }
@@ -11,6 +11,9 @@ export default class extends React.Component {
     return (
       <div id='dialog-menu'>
         用户名
+      { /**
+       <img src='static/avatar.png' alt='' />}
+       */}
         {this.props.name}
         <style jsx>{`
           #dialog-menu {

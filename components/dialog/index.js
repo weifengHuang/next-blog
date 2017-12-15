@@ -5,7 +5,6 @@ import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
 import { imUrl } from 'config/index.js'
-console.log('index imurl', imUrl)
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class extends React.Component {
