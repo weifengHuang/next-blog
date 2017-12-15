@@ -4,6 +4,9 @@ var http = require('http').Server(app)
 var io = require('socket.io')(http)
 var count = 0
 var loginUserList = []
+const {config} = require('../config')
+const { imUrl } = config
+const port = imUrl.split(':')[2]
 io.on('connection', (socket) => {
   console.log('a user connected')
   // socket.on('disconnect', () => {
@@ -39,6 +42,6 @@ io.on('connection', (socket) => {
   })
 })
 
-http.listen(3001, function(){
-  console.log('listening on *:3001')
+http.listen(port, function(){
+  console.log(`listen ${imUrl}`)
 })

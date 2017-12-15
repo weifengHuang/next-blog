@@ -1,6 +1,6 @@
 
 export default class extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     console.log('props', this.props)
     this.state = {
@@ -9,22 +9,22 @@ export default class extends React.Component {
 
   render () {
     return (
-      <div id="dialog-content">
+      <div id='dialog-content'>
         {
           this.props.chatRecords.map((record, index) => {
             let msg
             if (record.owner === 'mine') {
-               msg =
-               <div className='mine'>
-                <div>{record.time.toLocaleTimeString()}</div>
-                <div className='content'>{record.content}</div>
-               </div>
+              msg =
+                <div className='mine'>
+                  <div>{record.time.toLocaleTimeString()}</div>
+                  <div className='content'>{record.content}</div>
+                </div>
             } else {
-               msg =
-               <div className='other'>
-                <div>{record.time.toLocaleTimeString()}</div>
-                <div className='content'>{record.content}</div>
-               </div>
+              msg =
+                <div className='other'>
+                  <div>{record.time.toLocaleTimeString()}</div>
+                  <div className='content'>{record.content}</div>
+                </div>
             }
             return <div key={index}>{msg}</div>
           })

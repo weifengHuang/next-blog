@@ -6,5 +6,6 @@ console.log('apiUrl', apiUrl, imUrl)
 module.exports = {
   config,
   apiUrl,
-  domainAdress
+  domainAdress,
+  imUrl
 }

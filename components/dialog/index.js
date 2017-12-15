@@ -4,8 +4,8 @@ import io from 'socket.io-client'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
-import { imUrL } from 'config/index.js'
-console.log('index imurl', imUrL)
+import { imUrl } from 'config/index.js'
+console.log('index imurl', imUrl)
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class extends React.Component {
@@ -33,7 +33,7 @@ export default class extends React.Component {
     }
   }
   componentDidMount () {
-    this.socket = io(imUrL)
+    this.socket = io(imUrl)
     this.socket.emit('login', '', (user) => {
       console.log('login 服务器返回user', user)
       this.setState({
