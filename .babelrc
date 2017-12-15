@@ -18,7 +18,8 @@
       "root": ["./"],
       "alias": {
         "components": "./components",
-        "config": "./config"
+        "config": "./config",
+        "static": "./static"
       }
     }
   ]
