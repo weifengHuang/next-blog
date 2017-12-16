@@ -31,7 +31,7 @@ io.on('connection', (socket) => {
     loginUserList.push(user)
     fn(user)
     socket.broadcast.emit('broadcast', `广播消息${user.name}上线了`)
-    io.emit('getLoginList', loginUserList.filter(e => e.name !== name))
+    io.emit('getLoginList', loginUserList)
   })
   socket.on('disconnect', (user) => {
     console.log('用户下线了')

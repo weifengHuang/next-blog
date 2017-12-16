@@ -14,18 +14,18 @@ export default class extends React.Component {
       inputValue: '',
       user: {},
       chatRecords: [
-        {
-          type: 'input',
-          owner: 'mine',
-          content: '131231231',
-          time: new Date()
-        },
-        {
-          type: 'input',
-          owner: 'other',
-          content: '别人的',
-          time: new Date()
-        }
+        // {
+        //   type: 'input',
+        //   owner: 'mine',
+        //   content: '131231231',
+        //   time: new Date()
+        // },
+        // {
+        //   type: 'input',
+        //   owner: 'other',
+        //   content: '别人的',
+        //   time: new Date()
+        // }
       ],
       userList: [],
       chatUser: {}
@@ -57,8 +57,9 @@ export default class extends React.Component {
     })
 
     this.socket.on('getLoginList', (loginUserList) => {
+      let exceptUserList =  loginUserList.filter( e => e.socketId !== this.state.user.socketId)
       this.setState({
-        userList: loginUserList
+        userList: exceptUserList
       })
     })
     // this.socket.on('message', this.handleMessage)
