@@ -116,38 +116,22 @@ export default class extends React.Component {
   //   return { userAgent }
   // }
   render () {
-    return (
-      <div id='dialog'>
-        <div id='dialog-left'>
-          <DialogMenu id='dialog-menu' {...this.state.user} />
-          <DialogList id='dialog-list' userList={this.state.userList} selectUserChat={user => this.selectUserChat(user)} />
+    let dialogContent = null
+    if (this.state.chatUser.name) {
+      dialogContent =
+      <div id='selectedUser'>
+        <div id='top'>
+          <div id='chat-user'>
+            {this.state.chatUser.name || '无对话人'}
+          </div>
+          <DialogContent chatRecords={this.state.chatRecords} />
         </div>
-        <div id='dialog-content'>
-          <div id='top'>
-            <div id='chat-user'>
-              {this.state.chatUser.name || '无对话人'}
-            </div>
-            <DialogContent chatRecords={this.state.chatRecords} />
-          </div>
-          <div id='bottom'>
-            <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
-            <button className='send-button' onClick={e => this.handleClick(e)} >发送</button>
-          </div>
+        <div id='bottom'>
+          <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
+          <button className='send-button' onClick={e => this.handleClick(e)} >发送</button>
         </div>
         <style jsx>{`
-        #dialog {
-          border: 1px solid #cebdbd;
-          margin: 15px;
-          height: 500px;
-          width: 900px;
-          display: flex;
-          flex-wrap: wrap;
-          #dialog-left {
-            width: 250px;
-            border: 1px solid gray;
-            display: flex;
-          }
-          #dialog-content {
+          #selectedUser {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
@@ -161,7 +145,6 @@ export default class extends React.Component {
               }
             }
             #bottom {
-              // height: 25px;
               display: flex;
               align-items: center;
               input {
@@ -181,6 +164,51 @@ export default class extends React.Component {
                 color: #2196F3;
               }
             }
+          }
+        `}
+        </style>
+      </div>
+    } else {
+      dialogContent =
+      <div id='noneSelect'>
+        无对话记录
+        <style jsx>{`
+          #noneSelect {
+            flex:1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+          `
+        }</style>
+      </div>
+    }
+    let dilaogContent
+    return (
+      <div id='dialog'>
+        <div id='dialog-left'>
+          <DialogMenu id='dialog-menu' {...this.state.user} />
+          <DialogList id='dialog-list' userList={this.state.userList} selectUserChat={user => this.selectUserChat(user)} />
+        </div>
+        <div id='dialog-body'>
+          {dialogContent}
+        </div>
+        <style jsx>{`
+        #dialog {
+          border: 1px solid #cebdbd;
+          margin: 15px;
+          height: 500px;
+          width: 900px;
+          display: flex;
+          flex-wrap: wrap;
+          #dialog-left {
+            width: 250px;
+            border: 1px solid gray;
+            display: flex;
+          }
+          #dialog-body {
+            display: flex;
+            flex: 1;
           }
         }
         `
