@@ -11,6 +11,6 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.5.1",
-    "redis": "^2.8.0"
+    "ioredis": "^3.2.2"
   }
 }
