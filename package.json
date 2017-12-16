@@ -13,7 +13,6 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
-    "github-markdown-css": "^2.9.0",
     "isomorphic-unfetch": "^2.0.0",
     "next": "^4.1.4",
     "node-sass": "^4.7.2",
