@@ -12,7 +12,7 @@ io.on('connection', (socket) => {
   // socket.on('disconnect', () => {
   //   console.log('user disconnected')
   // })
-  // socket.join(socket.id)
+  socket.join('group')
   // socket.on('join', function (user) {
   //   socket.join(socket.id); // We are using room of socket io
   // });
