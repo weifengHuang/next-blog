@@ -10,15 +10,24 @@ export default class extends React.Component {
   render () {
     return (
       <div id='dialog-menu'>
+        <div id="avatar">
+          <img id='avatar' src='static/avatar.png' alt='' />
+        </div>
         用户名
-      { /**
-       <img src='static/avatar.png' alt='' />}
-       */}
         {this.props.name}
         <style jsx>{`
           #dialog-menu {
             width: 50px;
             border-right: 1px solid gray;
+            #avatar {
+              display: flex;
+              justify-content: center;
+              img {
+                margin-top: 5px;
+                width: 40px;
+                height: 40px;
+              }
+            }
           }
         `}
         </style>
