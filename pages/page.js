@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Router from 'next/router'
 import Head from 'next/head'
 const ReactMarkdown = require('react-markdown')
-import input from '../md/ci.md'
+import content from '../md/ci.md'
 import markdownCss from 'github-markdown-css/github-markdown.css'
 export default class extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ export default class extends React.Component {
     return (
       <div>
         <ReactMarkdown
-        source={input}
+        source={content}
         className={'markdown-body'}
         />
         <style global jsx>
