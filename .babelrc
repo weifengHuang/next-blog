@@ -28,6 +28,9 @@
     {
       "extensions": [".css"]
     }
+  ],
+  [
+    "transform-md-import-to-string"
   ]
 ]
 }
