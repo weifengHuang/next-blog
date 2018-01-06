@@ -22,6 +22,12 @@
         "static": "./static"
       }
     }
+  ],
+  [
+    "inline-import",
+    {
+      "extensions": [".css"]
+    }
   ]
 ]
 }

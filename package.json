@@ -13,6 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2",
+    "github-markdown-css": "^2.10.0",
+    "ioredis": "^3.2.2",
     "isomorphic-unfetch": "^2.0.0",
     "next": "^4.1.4",
     "node-sass": "^4.7.2",
@@ -20,10 +22,10 @@
     "react-dom": "^16.1.1",
     "react-markdown": "^3.1.0",
     "socket.io": "^2.0.4",
-    "styled-jsx-plugin-sass": "^0.2.2",
-    "ioredis": "^3.2.2"
+    "styled-jsx-plugin-sass": "^0.2.2"
   },
   "devDependencies": {
+    "babel-plugin-inline-import": "^2.0.6",
     "babel-plugin-module-resolver": "^3.0.0",
     "raw-loader": "^0.5.1"
   }
