@@ -11,9 +11,6 @@ export default class extends React.Component {
     this.state = {
       date: new Date()
     }
-    // this.init()
-  }
-  init () {
   }
   componentWillMount() {
     // this.setState({
@@ -25,7 +22,6 @@ export default class extends React.Component {
   }
   handleClick () {
     console.log('发送', this.state.socket)
-    // socket.emit
   }
   // static async getInitialProps({ req }) {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
