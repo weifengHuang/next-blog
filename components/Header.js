@@ -20,7 +20,7 @@ export default class extends React.Component {
     return (
       <div id='header'>
         <span>导航</span>
-        <span>文章</span>
+        <span onClick={e => Router.push('/post')}>文章</span>
         <span onClick={e => this.handleClick('chat', e)}>聊天室</span>
         {
           //<button onClick={e => this.handleClick(e)}>点击成功</button>
