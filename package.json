@@ -16,6 +16,7 @@
     "github-markdown-css": "^2.10.0",
     "ioredis": "^3.2.2",
     "isomorphic-unfetch": "^2.0.0",
+    "mongoose": "^4.13.9",
     "next": "^4.1.4",
     "node-sass": "^4.7.2",
     "react": "^16.1.1",
