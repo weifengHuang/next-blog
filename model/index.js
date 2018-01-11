@@ -1,7 +1,32 @@
-var mongoose = require('mongoose')
-const db = mongoose.connect('mongodb://localhost/test')
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-  // we're connected!
-  console.log('connect')
+
+const mongoose = require('mongoose')
+const chalk = require('chalk')
+const {mongodb} = require('../config')
+console.log('mongodb', mongodb)
+// import chalk from 'chalk'
+mongoose.connect(mongodb, {useMongoClient:true})
+mongoose.Promise = global.Promise
+
+const db = mongoose.connection
+
+db.once('open' ,() => {
+	console.log(
+    chalk.green('连接数据库成功')
+  );
+})
+
+db.on('error', function(error) {
+    console.error(
+      chalk.red('Error in MongoDb connection: ' + error)
+    );
+    mongoose.disconnect();
 });
+
+db.on('close', function() {
+    console.log(
+      chalk.red('数据库断开，重新连接数据库')
+    );
+    mongoose.connect(mongodb, {useMongoClient: true, server:{auto_reconnect:true}});
+});
+
+exports = db
