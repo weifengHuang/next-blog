@@ -1,6 +1,6 @@
-
-export default class extends React.Component {
-  constructor(props) {
+import React from 'react'
+export default class Dialoglist extends React.Component {
+  constructor (props) {
     super(props)
     console.log('props', this.props)
     this.state = {

@@ -1,14 +1,14 @@
 import React from 'react'
 import DialogLayout from '../components/dialog/index'
 
-export default class extends React.Component {
-  constructor(props) {
+export default class Chat extends React.Component {
+  constructor (props) {
     super(props)
     this.state = {
       date: new Date()
     }
   }
-  render() {
+  render () {
     return (
       <div id='chat'>
         <h1>群聊室</h1>

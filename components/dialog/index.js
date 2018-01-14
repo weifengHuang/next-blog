@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import Router from 'next/router'
+import React from 'react'
 import io from 'socket.io-client'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
@@ -7,7 +6,7 @@ import DialogMenu from './Dialog-Menu'
 import { imUrl } from 'config/index.js'
 // const socket = ioClient('http://127.0.0.1:3001')
 
-export default class extends React.Component {
+export default class DialogIndex extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -183,7 +182,6 @@ export default class extends React.Component {
         }</style>
       </div>
     }
-    let dilaogContent
     return (
       <div id='dialog'>
         <div id='dialog-left'>

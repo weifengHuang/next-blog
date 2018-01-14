@@ -1,5 +1,5 @@
-
-export default class extends React.Component {
+import React from 'react'
+export default class DialogContent extends React.Component {
   constructor (props) {
     super(props)
     console.log('props', this.props)
