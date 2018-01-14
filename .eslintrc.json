@@ -1,0 +1,29 @@
+{
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "plugins": [
+      "react"
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 8,
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "space-before-function-paren": ["error", "always"],
+        "no-console": 0,
+        "semi": 0,
+        "indent": ["error", 2],
+        "react/prop-types": 0
+    },
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true,
+        "amd": true
+    }
+}
