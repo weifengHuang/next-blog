@@ -4,13 +4,17 @@ import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
 import { imUrl } from 'config/index.js'
+import { Modal, Button, Input } from 'antd'
+import antdCss from 'antd/dist/antd.css'
 // const socket = ioClient('http://127.0.0.1:3001')
 
 export default class DialogIndex extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
+      isLogin: true,
       inputValue: '',
+      loginName: '',
       user: {},
       chatRecords: [
         // {
@@ -100,6 +104,11 @@ export default class DialogIndex extends React.Component {
       inputValue: event.target.value
     })
   }
+  inputChangeLoginName (event) {
+    this.setState({
+      loginName: event.target.value
+    })
+  }
   selectUserChat (user) {
     this.setState({
       chatUser: user
@@ -109,6 +118,18 @@ export default class DialogIndex extends React.Component {
     if (e.key === 'Enter') {
       this.handleClick()
     }
+  }
+  handleOk (e) {
+    console.log(e)
+    this.setState({
+      visible: false,
+    })
+  }
+  handleCancel (e) {
+    console.log(e)
+    this.setState({
+      visible: false,
+    })
   }
   // static async getInitialProps({ req }) {
   //   const userAgent = req ? req.headers['user-agent'] : navigator.userAgent
@@ -120,6 +141,7 @@ export default class DialogIndex extends React.Component {
       dialogContent =
       <div id='selectedUser'>
         <div id='top'>
+          <Button type="primary">123</Button>
           <div id='chat-user'>
             {this.state.chatUser.name || '无对话人'}
           </div>
@@ -184,6 +206,19 @@ export default class DialogIndex extends React.Component {
     }
     return (
       <div id='dialog'>
+        <Modal
+          visible={this.state.isLogin}
+          title="Title"
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          footer={[
+            <Button key="back" onClick={this.handleCancel}>Return</Button>,
+            <Button key="submit" type="primary" onClick={this.handleOk}>
+            Submit
+            </Button>,
+          ]}>
+          <Input type="text" placeholder="Basic usage" value={this.state.loginName} onChange={e => this.inputChangeLoginName(e)}/>
+        </Modal>
         <div id='dialog-left'>
           <DialogMenu id='dialog-menu' {...this.state.user} />
           <DialogList id='dialog-list' userList={this.state.userList} selectUserChat={user => this.selectUserChat(user)} />
@@ -192,6 +227,7 @@ export default class DialogIndex extends React.Component {
           {dialogContent}
         </div>
         <style jsx>{`
+        ${antdCss}
         #dialog {
           border: 1px solid #cebdbd;
           margin: 15px;
