@@ -35,7 +35,6 @@ export default class DialogContent extends React.Component {
             height: 100%;
             .mine {
               display: flex;
-              // justify-content: flex-end;
               margin-right: 10px;
               flex-direction: column;
               align-items: flex-end;
@@ -49,8 +48,6 @@ export default class DialogContent extends React.Component {
             }
             .content {
               margin: 10px;
-              // width: 100%;
-              // display: block;
             }
           }
           `
