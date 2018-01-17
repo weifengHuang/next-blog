@@ -16,15 +16,18 @@ export default class Sider extends React.Component {
   render () {
     return (
       <div id='Sider'>
-        <span>导航</span>
-        <span onClick={() => Router.push('/post')}>文章</span>
-        <span onClick={e => this.handleClick('chat', e)}>聊天室</span>
+        <span>Index</span>
+        <span onClick={() => Router.push('/post')}>Post</span>
+        <span onClick={e => this.handleClick('chat', e)}>chatRoom</span>
         {
           //<button onClick={e => this.handleClick(e)}>点击成功</button>
         }
         <style jsx>{
           `
         #Sider {
+          display: flex;
+          flex-direction: column;
+          color: #fff;
           width: 240px;
           background-color:#212121;
           span {
