@@ -1,6 +1,8 @@
 const express = require('express')
 const next = require('next')
 const app = express()
+const router = express.Router()
+const bodyParser = require('body-parser')
 const server = require('http').Server(app)
 var io = require('socket.io')(server)
 
@@ -49,6 +51,21 @@ io.on('connection', (socket) => {
 
 nextApp.prepare()
 .then(() => {
+  // api server
+  app.use(bodyParser.urlencoded({ extended: false }))
+// Parse application/json
+  app.use(bodyParser.json())
+  app.use((req, res, next) => {
+		res.header('Access-Control-Allow-Origin', '*')
+		res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
+		next()
+	})
+  app.get('/api/login', (req, res) => {
+    return res.json({code: 0})
+  })
+  // mongodb connection
+  require('./model')
+  // Next request
   app.get('/p/:id', (req, res) => {
     const actualPage = '/post'
     const queryParams = { id: req.params.id }
