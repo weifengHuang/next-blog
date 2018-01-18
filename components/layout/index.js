@@ -15,6 +15,9 @@ export default class Layout extends React.Component {
             width: 100%;
             margin: 0;
           }
+          div {
+            box-sizing: border-box;
+          }
           #layout {
             display: flex;
             width: 100%;
