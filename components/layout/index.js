@@ -7,7 +7,9 @@ export default class Layout extends React.Component {
     return (
       <div id='layout'>
         <Sider id='siderBar'/>
-        <Content id='content'></Content>
+        <Content id='content'>
+          {this.props.children}
+        </Content>
         <style jsx global>{
           `
           html, body, body>div:first-child, #__next, #__next>div:first-child {
