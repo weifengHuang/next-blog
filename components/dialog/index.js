@@ -1,20 +1,56 @@
 import React from 'react'
+// import Router from 'next/Router'
 import io from 'socket.io-client'
+// import fetch from 'isomorphic-unfetch'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
 import { imUrl } from 'config/index.js'
-import { Modal, Button, Input } from 'antd'
+import { Modal, Button, Input, Form } from 'antd'
+const FormItem = Form.Item
 import antdCss from 'antd/dist/antd.css'
-// const socket = ioClient('http://127.0.0.1:3001')
+const CollectionCreateForm = Form.create()(
+  (props) => {
+    const { visible, onCancel, onCreate, form } = props
+    const { getFieldDecorator } = form
+    return (
+      <Modal
+        visible={visible}
+        title='用户登录'
+        okText='登录'
+        onCancel={onCancel}
+        onOk={onCreate}
+      >
+        <Form layout='vertical'>
+          <FormItem label='用户名'>
+            {getFieldDecorator('name', {
+              rules: [{ required: true, message: '请输入用户名' }]
+            })(
+              <Input />
+            )}
+          </FormItem>
+          <FormItem label='密码'>
+            {getFieldDecorator('password', {
+              rules: [{ required: true, message: '请输入密码' }]
+            })(<Input type='text' />)}
+          </FormItem>
+        </Form>
+      </Modal>
+    )
+  }
+)
 
 export default class DialogIndex extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isLogin: true,
+      form: null,
+      isShowLoginModal: true,
       inputValue: '',
-      loginName: '',
+      loginForm: {
+        name: '',
+        passWord: ''
+      },
       user: {},
       chatRecords: [
         // {
@@ -58,21 +94,17 @@ export default class DialogIndex extends React.Component {
       console.log(`广播发出的消息${msg}`)
       // this.pushToChatRecores(msg)
     })
-
     this.socket.on('getLoginList', (loginUserList) => {
-      let exceptUserList =  loginUserList.filter( e => e.socketId !== this.state.user.socketId)
+      let exceptUserList = loginUserList.filter(e => e.socketId !== this.state.user.socketId)
       this.setState({
         userList: exceptUserList
       })
     })
-    // this.socket.on('message', this.handleMessage)
   }
   // close socket connection
   componentWillUnmount () {
     this.socket.close()
   }
-  // componentWillMount() {
-  // }
   pushToChatRecores (input) {
     this.setState({
       chatRecords: [...this.state.chatRecords, input]
@@ -83,7 +115,7 @@ export default class DialogIndex extends React.Component {
       userList: [...this.state.userList, userList]
     })
   }
-  handleClick () {
+  sendMessage () {
     let message = {
       type: 'input',
       owner: 'mine',
@@ -116,19 +148,25 @@ export default class DialogIndex extends React.Component {
   }
   handleKeyPress (e) {
     if (e.key === 'Enter') {
-      this.handleClick()
+      this.sendMessage()
     }
   }
-  handleOk (e) {
-    console.log(e)
-    this.setState({
-      visible: false,
-    })
+  closeLoginDialog () {
+    // 点击取消，调回首页
+    Router.push('/')
   }
-  handleCancel (e) {
-    console.log(e)
-    this.setState({
-      visible: false,
+  saveFormRef (form) {
+    this.form = form
+  }
+  handleLogin () {
+    const form = this.form
+    form.validateFields((err, values) => {
+      if (err) {
+        return
+      }
+      console.log('Received values of form: ', values)
+      form.resetFields()
+      this.setState({ isShowLoginModal: false })
     })
   }
   // static async getInitialProps({ req }) {
@@ -139,19 +177,19 @@ export default class DialogIndex extends React.Component {
     let dialogContent = null
     if (this.state.chatUser.name) {
       dialogContent =
-      <div id='selectedUser'>
-        <div id='top'>
-          <Button type="primary">123</Button>
-          <div id='chat-user'>
-            {this.state.chatUser.name || '无对话人'}
+        <div id='selectedUser'>
+          <div id='top'>
+            <Button type='primary'>123</Button>
+            <div id='chat-user'>
+              {this.state.chatUser.name || '无对话人'}
+            </div>
+            <DialogContent chatRecords={this.state.chatRecords} />
           </div>
-          <DialogContent chatRecords={this.state.chatRecords} />
-        </div>
-        <div id='bottom'>
-          <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
-          <button className='send-button' onClick={e => this.handleClick(e)} >发送</button>
-        </div>
-        <style jsx>{`
+          <div id='bottom'>
+            <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
+            <button className='send-button' onClick={e => this.sendMessage(e)} >发送</button>
+          </div>
+          <style jsx>{`
           #selectedUser {
             flex: 1;
             display: flex;
@@ -187,38 +225,33 @@ export default class DialogIndex extends React.Component {
             }
           }
         `}
-        </style>
-      </div>
+          </style>
+        </div>
     } else {
       dialogContent =
-      <div id='noneSelect'>
+        <div id='noneSelect'>
         无对话记录
-        <style jsx>{`
-          #noneSelect {
-            flex:1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-          }
-          `
-        }</style>
-      </div>
+          <style jsx>
+            {`
+              #noneSelect {
+                flex:1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+              `
+            }
+          </style>
+        </div>
     }
     return (
       <div id='dialog'>
-        <Modal
-          visible={this.state.isLogin}
-          title="Title"
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-          footer={[
-            <Button key="back" onClick={this.handleCancel}>Return</Button>,
-            <Button key="submit" type="primary" onClick={this.handleOk}>
-            Submit
-            </Button>,
-          ]}>
-          <Input type="text" placeholder="Basic usage" value={this.state.loginName} onChange={e => this.inputChangeLoginName(e)}/>
-        </Modal>
+        <CollectionCreateForm
+          ref={(form) => this.saveFormRef(form)}
+          visible={this.state.isShowLoginModal}
+          onCancel={this.closeLoginDialog}
+          onCreate={(e) => this.handleLogin(e)}
+        />
         <div id='dialog-left'>
           <DialogMenu id='dialog-menu' {...this.state.user} />
           <DialogList id='dialog-list' userList={this.state.userList} selectUserChat={user => this.selectUserChat(user)} />
