@@ -10,6 +10,7 @@ const nextHandle = nextApp.getRequestHandler()
 const {config} = require('./config')
 const { apiUrl } = config
 const port = apiUrl.split(':')[2]
+const { User } = require('./model')
 var count = 0
 var loginUserList = []
 io.on('connection', (socket) => {
@@ -50,7 +51,9 @@ io.on('connection', (socket) => {
 
 nextApp.prepare()
   .then(() => {
-  // api server
+    // mongodb connection
+    require('./model/connect.js')
+    // api server
     app.use(bodyParser.urlencoded({ extended: false }))
     // Parse application/json
     app.use(bodyParser.json())
@@ -59,11 +62,19 @@ nextApp.prepare()
       res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept')
       next()
     })
-    app.get('/api/login', (req, res) => {
-      return res.json({code: 0})
+    app.post('/api/login', async (req, res) => {
+      let {name, password} = req.query
+      let user = await User.findOne({name: name})
+      if (user) {
+        // 验证密码
+        let validateRes = user.validateAuth({name, password})
+        return res.json(validateRes)
+      } else {
+        // 直接注册一个
+        let registerRes = await User.register(name, password)
+        return res.json(registerRes)
+      }
     })
-    // mongodb connection
-    require('./model')
     // Next request
     app.get('/p/:id', (req, res) => {
       const actualPage = '/post'
