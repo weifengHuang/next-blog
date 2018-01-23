@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const crypto = require('crypto')
 let {log4js} = require('../utils')
 let logger = log4js.getLogger('test')
 const Schema = mongoose.Schema
@@ -19,9 +20,8 @@ const userSchema = new Schema({
     required: true
   }
 })
-const User = mongoose.model('User', userSchema)
 //
-userSchema.statics.saltedPassword = (password, salt = 'test') => {
+userSchema.statics.saltPassword = (password, salt = 'test') => {
   function _sha1 (s) {
     const algorithm = 'sha1'
     const hash = crypto.createHash(algorithm)
@@ -54,13 +54,17 @@ userSchema.statics.register = async (name, password) => {
       return {code: 1, message: e}
     }
   } catch (e) {
+    logger.error('User.register', e)
     return {code: 1, message: e}
   }
 }
-userSchema.methods.validateAuth = async (form) => {
+userSchema.methods.validateAuth = function (form) {
+  // 这里绑定箭头函数则拿不到调用的user实例, 用function，this指向调用者，及user实例
   try {
     const { name, password } = form
-    const saltedPassword = User.saltedPassword(password)
+    const saltedPassword = User.saltPassword(password)
+    console.log('saltedPassword', saltedPassword)
+    console.log('this', this)
     const usernameEquals = this.name === name
     const passwordEquals = this.password === saltedPassword
     if (!passwordEquals) {
@@ -70,9 +74,11 @@ userSchema.methods.validateAuth = async (form) => {
       return {code: 0, message: 'success'}
     }
   } catch (e) {
-    logger.error('e', e)
+    logger.error('validateAuth error', e)
     return {code: 1, message: e}
   }
 }
+const User = mongoose.model('User', userSchema)
+
 // User.methods.
 module.exports = User

@@ -11,6 +11,8 @@ const {config} = require('./config')
 const { apiUrl } = config
 const port = apiUrl.split(':')[2]
 const { User } = require('./model')
+const {log4js} = require('./utils')
+const logger = log4js.getLogger('server')
 var count = 0
 var loginUserList = []
 io.on('connection', (socket) => {
@@ -63,7 +65,10 @@ nextApp.prepare()
       next()
     })
     app.post('/api/login', async (req, res) => {
-      let {name, password} = req.query
+      let {name, password} = req.body
+      if (name) {
+        name = name.trim()
+      }
       let user = await User.findOne({name: name})
       if (user) {
         // 验证密码
