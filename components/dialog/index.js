@@ -1,11 +1,11 @@
 import React from 'react'
-// import Router from 'next/Router'
+import Router from 'next/router'
 import io from 'socket.io-client'
-// import fetch from 'isomorphic-unfetch'
+import fetch from 'isomorphic-unfetch'
 import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
-import { imUrl } from 'config/index.js'
+import { imUrl, apiUrl } from 'config/index.js'
 import { Modal, Button, Input, Form } from 'antd'
 const FormItem = Form.Item
 import antdCss from 'antd/dist/antd.css'
@@ -67,12 +67,13 @@ export default class DialogIndex extends React.Component {
         // }
       ],
       userList: [],
-      chatUser: {}
+      chatUser: {},
+      userName: ''
     }
   }
-  componentDidMount () {
+  initSocket () {
     this.socket = io(imUrl)
-    this.socket.emit('login', '', (user) => {
+    this.socket.emit('login', {userName: this.state.userName}, (user) => {
       console.log('login 服务器返回user', user)
       this.setState({
         user: user
@@ -100,6 +101,8 @@ export default class DialogIndex extends React.Component {
         userList: exceptUserList
       })
     })
+  }
+  componentDidMount () {
   }
   // close socket connection
   componentWillUnmount () {
@@ -158,15 +161,29 @@ export default class DialogIndex extends React.Component {
   saveFormRef (form) {
     this.form = form
   }
-  handleLogin () {
+  async handleLogin () {
     const form = this.form
-    form.validateFields((err, values) => {
+    form.validateFields(async (err, values) => {
       if (err) {
         return
       }
       console.log('Received values of form: ', values)
-      form.resetFields()
-      this.setState({ isShowLoginModal: false })
+      let loginRes = await fetch(`${apiUrl}/api/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(values)
+      })
+      if (loginRes.ok) {
+        let res = await loginRes.json()
+        console.log('res', res)
+        this.setState({
+          userName: value.name
+        })
+        form.resetFields()
+        this.setState({ isShowLoginModal: false })
+      }
     })
   }
   // static async getInitialProps({ req }) {
