@@ -12,6 +12,7 @@ const { apiUrl } = config
 const port = apiUrl.split(':')[2]
 const { User } = require('./model')
 const {log4js} = require('./utils')
+const { SocketHandle } = require('./socket')
 const logger = log4js.getLogger('server')
 var count = 0
 var loginUserList = []
@@ -28,19 +29,18 @@ io.on('connection', (socket) => {
     console.log('收到消息', data.to)
     io.to(data.to).emit('chat message', data.msg)
   })
-  socket.on('login', (data, fn) => {
+  socket.on('login', async (data, fn) => {
+    let { name } = data
     console.log('触发login事件', count, socket.id)
-    let name = `user${count}`
-    let user = {
-      id: count++,
-      name: name,
-      socketId: socket.id
-    }
     // 在线列表
-    loginUserList.push(user)
-    fn(user)
-    socket.broadcast.emit('broadcast', `广播消息${user.name}上线了`)
-    io.emit('getLoginList', loginUserList)
+    let updateUser = await SocketHandle.updateUserSockeId(name, socket.id)
+    if (updateUser) {
+      fn({name: updateUser.name, socketId: updateUser.socketId})
+    }
+    let loginList = await User.getOnlineUsers()
+    console.log('loginList', loginList)
+    socket.broadcast.emit('broadcast', `广播消息${name}上线了`)
+    io.emit('getLoginList', loginList)
   })
   socket.on('disconnect', () => {
     console.log('用户下线了')

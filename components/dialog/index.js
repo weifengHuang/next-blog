@@ -6,7 +6,7 @@ import DialogList from './Dialog-List'
 import DialogContent from './Dialog-Content'
 import DialogMenu from './Dialog-Menu'
 import { imUrl, apiUrl } from 'config/index.js'
-import { Modal, Button, Input, Form } from 'antd'
+import { Modal, Button, Input, Form, message } from 'antd'
 const FormItem = Form.Item
 import antdCss from 'antd/dist/antd.css'
 const CollectionCreateForm = Form.create()(
@@ -47,10 +47,6 @@ export default class DialogIndex extends React.Component {
       form: null,
       isShowLoginModal: true,
       inputValue: '',
-      loginForm: {
-        name: '',
-        passWord: ''
-      },
       user: {},
       chatRecords: [
         // {
@@ -73,7 +69,7 @@ export default class DialogIndex extends React.Component {
   }
   initSocket () {
     this.socket = io(imUrl)
-    this.socket.emit('login', {userName: this.state.userName}, (user) => {
+    this.socket.emit('login', {name: this.state.userName}, (user) => {
       console.log('login 服务器返回user', user)
       this.setState({
         user: user
@@ -106,7 +102,7 @@ export default class DialogIndex extends React.Component {
   }
   // close socket connection
   componentWillUnmount () {
-    this.socket.close()
+    // this.socket.close()
   }
   pushToChatRecores (input) {
     this.setState({
@@ -178,11 +174,15 @@ export default class DialogIndex extends React.Component {
       if (loginRes.ok) {
         let res = await loginRes.json()
         console.log('res', res)
-        this.setState({
-          userName: value.name
-        })
-        form.resetFields()
-        this.setState({ isShowLoginModal: false })
+        if (res.code === 0 ) {
+          message.success('登录成功')
+          this.setState({
+            userName: values.name
+          })
+          form.resetFields()
+          this.setState({ isShowLoginModal: false })
+          this.initSocket()
+        }
       }
     })
   }

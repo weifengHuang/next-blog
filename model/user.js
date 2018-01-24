@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const crypto = require('crypto')
 let {log4js} = require('../utils')
-let logger = log4js.getLogger('test')
+let logger = log4js.getLogger('User')
 const Schema = mongoose.Schema
 const userSchema = new Schema({
   name: {
@@ -56,6 +56,14 @@ userSchema.statics.register = async (name, password) => {
   } catch (e) {
     logger.error('User.register', e)
     return {code: 1, message: e}
+  }
+}
+userSchema.statics.getOnlineUsers = async function () {
+  try {
+    let users = await User.find({onlineStatus: 1})
+    return users
+  } catch (e) {
+    return null
   }
 }
 userSchema.methods.validateAuth = function (form) {

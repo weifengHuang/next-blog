@@ -1,6 +1,8 @@
 // const Redis = require('ioredis')
 // const redis = new Redis()
 const User = require('../model/user.js')
+let {log4js} = require('../utils')
+let logger = log4js.getLogger('SocketHandle')
 const SocketHandle = class SocketHandle {
   constructor () {
   }
@@ -24,6 +26,16 @@ const SocketHandle = class SocketHandle {
     }
     // redis.hset('userList', userName, socketId)
   }
+  static async updateUserSockeId (name, socketId) {
+    try {
+      let user = await User.findOneAndUpdate({name: name}, {socketId: socketId, onlineStatus: 1})
+      logger.debug('user', user)
+      return user
+    } catch (e) {
+      logger.error('updateUserSockeId', e)
+      return false
+    }
+  }
   static async getUserSocketId (name) {
     try {
       let user = await User.findOne({name: name})
@@ -38,4 +50,6 @@ const SocketHandle = class SocketHandle {
     // await redis.hget('userList', userName, userName)
   }
 }
-module.exports = SocketHandle
+module.exports = {
+  SocketHandle
+}
