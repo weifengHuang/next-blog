@@ -92,7 +92,7 @@ export default class DialogIndex extends React.Component {
       // this.pushToChatRecores(msg)
     })
     this.socket.on('getLoginList', (loginUserList) => {
-      let exceptUserList = loginUserList.filter(e => e.socketId !== this.state.user.socketId)
+      let exceptUserList = loginUserList.filter(e => e.name !== this.state.user.name)
       this.setState({
         userList: exceptUserList
       })
@@ -182,6 +182,8 @@ export default class DialogIndex extends React.Component {
           form.resetFields()
           this.setState({ isShowLoginModal: false })
           this.initSocket()
+        } else if (res.code === 1 && res.message === 'passwordError'){
+          message.error('密码错误')
         }
       }
     })
@@ -196,15 +198,14 @@ export default class DialogIndex extends React.Component {
       dialogContent =
         <div id='selectedUser'>
           <div id='top'>
-            <Button type='primary'>123</Button>
             <div id='chat-user'>
               {this.state.chatUser.name || '无对话人'}
             </div>
             <DialogContent chatRecords={this.state.chatRecords} />
           </div>
           <div id='bottom'>
-            <input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
-            <button className='send-button' onClick={e => this.sendMessage(e)} >发送</button>
+            <Input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
+            <Button className='send-button' onClick={e => this.sendMessage(e)} >发送</Button>
           </div>
           <style jsx>{`
           #selectedUser {
