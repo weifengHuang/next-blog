@@ -36,6 +36,16 @@ const SocketHandle = class SocketHandle {
       return false
     }
   }
+  static async disconnect (socketId) {
+    try {
+      let user = await User.findOneAndUpdate({socketId: socketId}, {onlineStatus: 0})
+      logger.debug('user', `${user}下线`)
+      return user
+    } catch (e) {
+      logger.error('updateUserSockeId', e)
+      return false
+    }
+  }
   static async getUserSocketId (name) {
     try {
       let user = await User.findOne({name: name})

@@ -15,7 +15,6 @@ const {log4js} = require('./utils')
 const { SocketHandle } = require('./socket')
 const logger = log4js.getLogger('server')
 var count = 0
-var loginUserList = []
 io.on('connection', (socket) => {
   console.log('a user connected')
   // socket.on('disconnect', () => {
@@ -42,11 +41,10 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('broadcast', `广播消息${name}上线了`)
     io.emit('getLoginList', loginList)
   })
-  socket.on('disconnect', () => {
+  socket.on('disconnect', async () => {
     console.log('用户下线了')
-    loginUserList = loginUserList.filter(e => {
-      return e.socketId !== socket.id
-    })
+    // todo 处理刷新时候的逻辑，刷新下线再上线
+    await SocketHandle.disconnect(socket.id)
     // io.emit('disconnect', loginUserList)
   })
 })
