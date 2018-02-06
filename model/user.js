@@ -60,7 +60,7 @@ userSchema.statics.register = async (name, password) => {
 }
 userSchema.statics.getOnlineUsers = async function () {
   try {
-    let users = await User.find({onlineStatus: 1})
+    let users = await User.find({onlineStatus: 1}, { "name": 1,"socketId": 1 })
     return users
   } catch (e) {
     return null

@@ -24,9 +24,14 @@ io.on('connection', (socket) => {
   // socket.on('join', function (user) {
   //   socket.join(socket.id); // We are using room of socket io
   // });
-  socket.on('chat message', (data) => {
-    console.log('收到消息', data.to)
-    io.to(data.to).emit('chat message', data.msg)
+  socket.on('chat message', async (data) => {
+    logger.info('收到消息', data.to)
+    let userId = data.to
+    let user = await User.findById(userId)
+    logger.info('chat message', user)
+    if (user) {
+      io.to(user.socketId).emit('chat message', data)
+    }
   })
   socket.on('login', async (data, fn) => {
     let { name } = data
@@ -34,7 +39,7 @@ io.on('connection', (socket) => {
     // 在线列表
     let updateUser = await SocketHandle.updateUserSockeId(name, socket.id)
     if (updateUser) {
-      fn({name: updateUser.name, socketId: updateUser.socketId})
+      fn({name: updateUser.name, socketId: updateUser.socketId, _id: updateUser._id})
     }
     let loginList = await User.getOnlineUsers()
     console.log('loginList', loginList)
