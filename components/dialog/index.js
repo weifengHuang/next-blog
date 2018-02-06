@@ -75,16 +75,23 @@ export default class DialogIndex extends React.Component {
         user: user
       })
     })
-    this.socket.on('chat message', (msg) => {
-      setTimeout(() => {
-        let message = {
-          type: 'text',
-          owner: 'other',
-          content: msg,
-          time: new Date()
-        }
-        this.pushToChatRecores(message)
-      }, 1000)
+    this.socket.on('chat message', (data) => {
+      console.log('chat message data', data)
+      let { msg, from } = data
+      let chatToUser = this.state.userList.find((user) => {
+        console.log('user in Userlist', user)
+        return user._id === from
+      })
+      console.log('chatToUser', chatToUser)
+      let message = {
+        type: 'text',
+        owner: 'other',
+        content: msg,
+        time: new Date()
+      }
+      chatToUser.chatRecords.push(message)
+      this.forceUpdate()
+      this.pushToChatRecores(message)
       console.log('接受到服务器返回')
     })
     this.socket.on('broadcast', (msg) => {
@@ -92,7 +99,12 @@ export default class DialogIndex extends React.Component {
       // this.pushToChatRecores(msg)
     })
     this.socket.on('getLoginList', (loginUserList) => {
-      let exceptUserList = loginUserList.filter(e => e.name !== this.state.user.name)
+      let exceptUserList = loginUserList
+        .filter(e => e.name !== this.state.user.name)
+        .map(e => {
+          e.chatRecords = []
+          return e
+        })
       this.setState({
         userList: exceptUserList
       })
@@ -126,7 +138,8 @@ export default class DialogIndex extends React.Component {
       inputValue: ''
     })
     this.socket.emit('chat message', {
-      to: this.state.chatUser.socketId,
+      from: this.state.user._id,
+      to: this.state.chatUser._id,
       msg: this.state.inputValue
     })
   }
