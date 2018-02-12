@@ -78,20 +78,20 @@ export default class DialogIndex extends React.Component {
     this.socket.on('chat message', (data) => {
       console.log('chat message data', data)
       let { msg, from } = data
-      let chatToUser = this.state.userList.find((user) => {
-        console.log('user in Userlist', user)
-        return user._id === from
-      })
-      console.log('chatToUser', chatToUser)
+      // let chatToUser = this.state.userList.find((user) => {
+      //   console.log('user in Userlist', user)
+      //   return user._id === from
+      // })
       let message = {
         type: 'text',
         owner: 'other',
         content: msg,
         time: new Date()
       }
-      chatToUser.chatRecords.push(message)
-      this.forceUpdate()
-      this.pushToChatRecores(message)
+      this.pushRecordToUserList(from, message)
+      // chatToUser.chatRecords.push(message)
+      // this.forceUpdate()
+      // this.pushToChatRecores(from, message)
       console.log('接受到服务器返回')
     })
     this.socket.on('broadcast', (msg) => {
@@ -116,6 +116,17 @@ export default class DialogIndex extends React.Component {
   componentWillUnmount () {
     // this.socket.close()
   }
+  pushRecordToUserList (userId, message) {
+    let chatToUser = this.state.userList.find((user) => {
+      console.log('user in Userlist', user)
+      return user._id === userId
+    })
+    chatToUser.chatRecords.push(message)
+    this.forceUpdate()
+    // if (userId === this.state.user._id) {
+    //   this.pushToChatRecores(message)
+    // }
+  }
   pushToChatRecores (input) {
     this.setState({
       chatRecords: [...this.state.chatRecords, input]
@@ -133,7 +144,8 @@ export default class DialogIndex extends React.Component {
       content: this.state.inputValue,
       time: new Date()
     }
-    this.pushToChatRecores(message)
+    this.pushRecordToUserList(this.state.chatUser._id, message)
+    // this.pushToChatRecores(message)
     this.setState({
       inputValue: ''
     })
@@ -154,8 +166,10 @@ export default class DialogIndex extends React.Component {
     })
   }
   selectUserChat (user) {
+    // 选择完用户以后右侧聊天记录更新
     this.setState({
-      chatUser: user
+      chatUser: user,
+      chatRecords: user.chatRecords
     })
   }
   handleKeyPress (e) {
@@ -206,6 +220,10 @@ export default class DialogIndex extends React.Component {
   //   return { userAgent }
   // }
   render () {
+    let chatToUser = this.state.userList.find((user) => {
+      console.log('user in Userlist', user)
+      return user._id === this.state.chatUser._id
+    })
     let dialogContent = null
     if (this.state.chatUser.name) {
       dialogContent =
@@ -214,7 +232,7 @@ export default class DialogIndex extends React.Component {
             <div id='chat-user'>
               {this.state.chatUser.name || '无对话人'}
             </div>
-            <DialogContent chatRecords={this.state.chatRecords} />
+            <DialogContent chatRecords={chatToUser.chatRecords} />
           </div>
           <div id='bottom'>
             <Input type='text' value={this.state.inputValue} onChange={e => this.inputOnchange(e)} onKeyPress={e => this.handleKeyPress(e)} />
