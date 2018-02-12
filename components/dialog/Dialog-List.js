@@ -14,7 +14,14 @@ export default class Dialoglist extends React.Component {
     return (
       <div id="dialogList">
         {this.props.userList.map(user => {
-          return <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>{user.name}
+          return <div className="user" onClick={e => this.clickUser(e, user)} key={user.id}>
+            <div className="user-name">{user.name}</div>
+            {
+              user.chatRecords.length > 0 &&
+              <div>
+                <div className="last-record">{user.chatRecords[user.chatRecords.length - 1].content}</div>
+              </div>
+            }
           </div>})
         }
         <style jsx> {`
@@ -27,6 +34,14 @@ export default class Dialoglist extends React.Component {
               margin: 5px;
               &:hover {
                 background-color: #eee;
+              }
+              .user-name {
+                font-size: 17px;
+                color: black;
+              }
+              .last-record {
+                font-size: 12px;
+                color: #9e9e9e;
               }
             }
           }
